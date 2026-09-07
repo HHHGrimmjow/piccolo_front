@@ -1,0 +1,259 @@
+/* ============================================
+   Piccolo - 全局样式
+   可爱俏皮风格 🎲✨
+   ============================================ */
+
+/* CSS 变量 - 主题色 */
+:root {
+  --pink: #ff6b9d;
+  --pink-light: #fff0f5;
+  --pink-dark: #e85d8c;
+  --purple: #c44dff;
+  --purple-light: #f3e8ff;
+  --blue: #6b9dff;
+  --orange: #ff8a65;
+  --yellow: #ffd54f;
+  --green: #81c784;
+
+  --bg-primary: #fafbff;
+  --bg-soft: #f8f5ff;
+  --bg-card: #ffffff;
+
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+
+  --shadow-sm: 0 2px 8px rgba(255, 107, 157, 0.06);
+  --shadow-md: 0 4px 16px rgba(255, 107, 157, 0.1);
+  --shadow-lg: 0 8px 32px rgba(255, 107, 157, 0.12);
+}
+
+/* 全局重置 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'PingFang SC', 'Microsoft YaHei', sans-serif;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--pink);
+  text-decoration: none;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--purple);
+  }
+}
+
+/* 主内容区域 */
+.main-content {
+  min-height: 100vh;
+
+  &.with-header {
+    padding-top: 0;
+  }
+}
+
+/* Element Plus 样式覆盖 - 让组件更可爱 */
+
+/* 按钮 */
+.el-button--primary {
+  background: linear-gradient(135deg, var(--pink), var(--purple)) !important;
+  border: none !important;
+  border-radius: 20px !important;
+  font-weight: 600;
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+  }
+}
+
+.el-button--default {
+  border-radius: 20px !important;
+}
+
+/* 输入框 */
+.el-input__wrapper {
+  border-radius: 12px !important;
+  transition: all 0.2s !important;
+
+  &:hover {
+    box-shadow: 0 0 0 2px var(--pink-light) !important;
+  }
+
+  &.is-focus {
+    box-shadow: 0 0 0 2px var(--pink) !important;
+  }
+}
+
+/* 卡片 */
+.el-card {
+  border-radius: var(--radius-lg) !important;
+  border: none !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+/* 对话框 */
+.el-dialog {
+  border-radius: var(--radius-xl) !important;
+}
+
+/* 标签 */
+.el-tag {
+  border-radius: 12px !important;
+}
+
+/* 分页 */
+.el-pagination .el-pager li.is-active {
+  background: var(--pink) !important;
+}
+
+/* 消息提示 */
+.el-message {
+  border-radius: 12px !important;
+}
+
+/* 头像 */
+.el-avatar {
+  background: linear-gradient(135deg, var(--pink), var(--purple)) !important;
+}
+
+/* 空状态 */
+.el-empty__description p {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--pink-light);
+  border-radius: 3px;
+
+  &:hover {
+    background: var(--pink);
+  }
+}
+
+/* 选中文本颜色 */
+::selection {
+  background: var(--pink);
+  color: white;
+}
+
+/* 暗色模式 */
+.dark-mode {
+  --bg-primary: #1a1a2e;
+  --bg-soft: #16213e;
+  --bg-card: #1f2940;
+  --text-primary: #e0e0e0;
+  --text-secondary: #b0b0b0;
+  --text-muted: #808080;
+  --pink-light: #2d1f2b;
+  --purple-light: #2a1f3d;
+
+  .layout-header {
+    background: rgba(26, 26, 46, 0.9);
+  }
+
+  .topic-card,
+  .ranking-card,
+  .profile-card,
+  .vote-section,
+  .detail-header,
+  .comment-section-wrap,
+  .create-container {
+    background: var(--bg-card);
+  }
+
+  .card-title,
+  .topic-title,
+  .profile-info h2 {
+    color: var(--text-primary);
+  }
+}
+
+/* 动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .header-inner {
+    padding: 0 16px;
+  }
+
+  .nav-menu {
+    display: none;
+  }
+
+  .create-btn span {
+    display: none;
+  }
+
+  .topic-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ranking-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-content h1 {
+    font-size: 22px;
+  }
+
+  .profile-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .stats {
+    justify-content: center;
+  }
+}
