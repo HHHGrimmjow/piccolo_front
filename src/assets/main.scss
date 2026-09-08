@@ -225,7 +225,7 @@ a {
 /* 响应式 */
 @media (max-width: 768px) {
   .header-inner {
-    padding: 0 16px;
+    padding: 0 12px;
   }
 
   .nav-menu {
@@ -255,5 +255,37 @@ a {
 
   .stats {
     justify-content: center;
+  }
+
+  /* 全局移动端通用 */
+  .home-container,
+  .detail-container,
+  .create-container,
+  .ranking-container,
+  .profile-container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* 对话框移动端全宽 */
+  .el-dialog {
+    width: 90% !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
+  }
+
+  /* 评论区输入换行 */
+  .comment-input .input-wrap {
+    flex-wrap: wrap;
+  }
+
+  /* 排行榜卡片 */
+  .ranking-card {
+    padding: 20px 16px !important;
+  }
+
+  .rank-info .rank-stats {
+    flex-wrap: wrap;
+    gap: 6px;
   }
 }

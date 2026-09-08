@@ -67,6 +67,23 @@
     <!-- 编辑资料弹窗 -->
     <el-dialog v-model="showEditDialog" title="编辑资料" width="400px" :close-on-click-modal="false">
       <el-form label-position="top">
+        <el-form-item label="头像">
+          <div class="avatar-upload">
+            <el-avatar :size="64" :src="avatarPreview || editForm.avatar">
+              {{ editForm.nickname?.charAt(0) }}
+            </el-avatar>
+            <el-upload
+                :show-file-list="false"
+                :before-upload="beforeAvatarUpload"
+                :http-request="handleAvatarUpload"
+                accept="image/jpeg,image/png,image/gif"
+            >
+              <el-button size="small" round :loading="avatarUploading">
+                {{ avatarUploading ? '上传中...' : '更换头像' }}
+              </el-button>
+            </el-upload>
+          </div>
+        </el-form-item>
         <el-form-item label="昵称">
           <el-input v-model="editForm.nickname" placeholder="你的昵称" />
         </el-form-item>
@@ -86,7 +103,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useTopicStore } from '@/stores/topic'
-import { updateProfile } from '@/api/user'
+import { updateProfile, uploadFile } from '@/api/user'
 import { ElMessage } from 'element-plus'
 
 const userStore = useUserStore()
@@ -97,17 +114,52 @@ const voteHistory = ref([])
 const activeTab = ref('history')
 const showEditDialog = ref(false)
 const saving = ref(false)
+const avatarUploading = ref(false)
+const avatarPreview = ref('')
 
 const editForm = reactive({
   nickname: '',
-  bio: ''
+  bio: '',
+  avatar: ''
 })
+
+function beforeAvatarUpload(file) {
+  const isImage = ['image/jpeg', 'image/png', 'image/gif'].includes(file.type)
+  const isLt2M = file.size / 1024 / 1024 < 2
+  if (!isImage) {
+    ElMessage.error('只能上传 JPG/PNG/GIF 格式的图片')
+    return false
+  }
+  if (!isLt2M) {
+    ElMessage.error('图片大小不能超过 2MB')
+    return false
+  }
+  return true
+}
+
+async function handleAvatarUpload({ file }) {
+  avatarUploading.value = true
+  try {
+    const res = await uploadFile(file)
+    const url = res.data
+    editForm.avatar = url
+    avatarPreview.value = url
+    ElMessage.success('头像已上传')
+  } catch (e) {
+    ElMessage.error('头像上传失败')
+  } finally {
+    avatarUploading.value = false
+  }
+}
 
 async function loadData() {
   try {
-    userInfo.value = await userStore.fetchUserInfo()
-    editForm.nickname = userInfo.value.nickname
-    editForm.bio = userInfo.value.bio
+    const res = await userStore.fetchUserInfo()
+    userInfo.value = res.data
+    editForm.nickname = res.data.nickname
+    editForm.bio = res.data.bio
+    editForm.avatar = (typeof res.data.avatar === 'string') ? res.data.avatar : ''
+    avatarPreview.value = ''
     voteHistory.value = await topicStore.fetchVoteHistory()
   } catch (e) {
     // handled
@@ -117,9 +169,12 @@ async function loadData() {
 async function saveProfile() {
   saving.value = true
   try {
+    // 确保 avatar 一定是字符串
+    const avatar = (typeof editForm.avatar === 'string') ? editForm.avatar : ''
     await updateProfile({
       nickname: editForm.nickname,
-      bio: editForm.bio
+      bio: editForm.bio,
+      avatar
     })
     await userStore.fetchUserInfo()
     ElMessage.success('资料更新成功~')
@@ -167,6 +222,12 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   gap: 12px;
+}
+
+.avatar-upload {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .profile-info {
@@ -283,5 +344,53 @@ onMounted(() => {
   font-size: 12px;
   color: #ccc;
   white-space: nowrap;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .profile-page {
+    padding: 20px 16px;
+  }
+
+  .profile-card {
+    padding: 24px 16px;
+    border-radius: 20px;
+  }
+
+  .profile-avatar {
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .profile-info h2 {
+    font-size: 18px;
+  }
+
+  .stats {
+    gap: 16px;
+  }
+
+  .stat-item .stat-num {
+    font-size: 18px;
+  }
+
+  .profile-tabs {
+    gap: 6px;
+  }
+
+  .tab {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .history-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .history-time {
+    align-self: flex-end;
+  }
 }
 </style>

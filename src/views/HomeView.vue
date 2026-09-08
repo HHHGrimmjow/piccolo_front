@@ -181,4 +181,41 @@ onMounted(() => {
   justify-content: center;
   margin-top: 32px;
 }
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .hero-banner {
+    padding: 28px 16px 20px;
+  }
+
+  .hero-content h1 {
+    font-size: 20px;
+  }
+
+  .hero-content p {
+    font-size: 13px;
+  }
+
+  .home-container {
+    padding: 16px;
+  }
+
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-input {
+    max-width: 100%;
+  }
+
+  .sort-tabs {
+    justify-content: center;
+  }
+
+  .topic-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
 </style>

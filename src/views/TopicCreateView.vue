@@ -284,4 +284,28 @@ async function handleSubmit() {
   background: linear-gradient(135deg, #ff6b9d, #c44dff);
   border: none;
 }
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .create-page {
+    padding: 20px 16px;
+  }
+
+  .create-container {
+    padding: 24px 16px;
+    border-radius: 20px;
+  }
+
+  .create-header h1 {
+    font-size: 20px;
+  }
+
+  .option-row {
+    gap: 6px;
+  }
+
+  .upload-placeholder {
+    height: 120px;
+  }
+}
 </style>

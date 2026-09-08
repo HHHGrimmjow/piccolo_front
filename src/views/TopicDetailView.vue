@@ -393,4 +393,71 @@ onMounted(() => {
   border-radius: 20px;
   padding: 28px;
 }
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .detail-container {
+    padding: 16px;
+  }
+
+  .detail-header {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .topic-title {
+    font-size: 20px;
+  }
+
+  .topic-desc {
+    font-size: 14px;
+  }
+
+  .topic-meta {
+    gap: 8px;
+  }
+
+  .meta-stat, .meta-deadline {
+    font-size: 12px;
+  }
+
+  .vote-section {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .option-card {
+    padding: 12px 14px;
+  }
+
+  .option-text {
+    font-size: 14px;
+  }
+
+  .vote-btn {
+    min-width: 160px;
+    height: 44px;
+    font-size: 15px;
+  }
+
+  .comment-section-wrap {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .comment-input {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+
+    .input-wrap {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  .comment-item {
+    gap: 8px;
+  }
+}
 </style>

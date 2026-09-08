@@ -189,4 +189,25 @@ async function handleRegister() {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
 }
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .auth-card {
+    width: 90%;
+    max-width: 400px;
+    padding: 32px 24px;
+  }
+
+  .auth-header .auth-icon {
+    font-size: 36px;
+  }
+
+  .auth-header h1 {
+    font-size: 20px;
+  }
+
+  .deco {
+    font-size: 28px;
+  }
+}
 </style>

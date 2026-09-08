@@ -192,4 +192,47 @@ onMounted(() => {
   padding: 40px;
   color: #ccc;
 }
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .ranking-page {
+    padding: 20px 16px;
+  }
+
+  .ranking-header h1 {
+    font-size: 22px;
+  }
+
+  .ranking-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ranking-card {
+    padding: 20px 16px;
+    border-radius: 20px;
+  }
+
+  .rank-item {
+    gap: 10px;
+    padding: 10px 8px;
+  }
+
+  .rank-num {
+    font-size: 16px;
+    width: 28px;
+
+    &.rank-1, &.rank-2, &.rank-3 {
+      font-size: 20px;
+    }
+  }
+
+  .rank-info h4 {
+    font-size: 13px;
+  }
+
+  .rank-info .rank-stats {
+    font-size: 11px;
+    gap: 8px;
+  }
+}
 </style>

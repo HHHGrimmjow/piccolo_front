@@ -169,4 +169,29 @@ function handleCommand(command) {
     transform: scale(1.1);
   }
 }
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .logo-text {
+    font-size: 18px;
+  }
+
+  .logo-icon {
+    font-size: 22px;
+  }
+
+  .create-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .header-actions {
+    gap: 8px;
+  }
+
+  .header-actions .el-button--default {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
 </style>
