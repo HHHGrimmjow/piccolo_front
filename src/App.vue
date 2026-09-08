@@ -9,12 +9,14 @@
       </router-view>
     </main>
   </div>
+  <BirthdayEffect />
 </template>
 
 <script setup>
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import LayoutHeader from '@/components/LayoutHeader.vue'
+import BirthdayEffect from '@/components/BirthdayEffect.vue'
 
 const route = useRoute()
 const isDark = ref(false)

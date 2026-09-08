@@ -20,7 +20,12 @@
         </el-form-item>
         <el-form-item prop="confirmPassword">
           <el-input v-model="form.confirmPassword" type="password" placeholder="确认密码" prefix-icon="Lock"
-                    size="large" show-password @keyup.enter="handleRegister" />
+                    size="large" show-password />
+        </el-form-item>
+        <el-form-item>
+          <el-date-picker v-model="form.birthday" type="date" placeholder="🎂 选填，生日当天会有惊喜哦~"
+                          format="YYYY-MM-DD" value-format="YYYY-MM-DD" style="width:100%" size="large"
+                          :disabled-date="(date) => date > new Date()" />
         </el-form-item>
 
         <el-button type="primary" size="large" round class="register-btn" :loading="loading"
@@ -55,7 +60,8 @@ const form = reactive({
   username: '',
   nickname: '',
   password: '',
-  confirmPassword: ''
+  confirmPassword: '',
+  birthday: null
 })
 
 const validateConfirm = (rule, value, callback) => {
@@ -90,7 +96,8 @@ async function handleRegister() {
     await userStore.register({
       username: form.username,
       password: form.password,
-      nickname: form.nickname
+      nickname: form.nickname,
+      birthday: form.birthday
     })
     ElMessage.success('注册成功~ 快去登录吧！')
     router.push('/login')
