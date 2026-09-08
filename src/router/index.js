@@ -39,6 +39,12 @@ const routes = [
     meta: { title: '个人中心 - Piccolo', requiresAuth: true }
   },
   {
+    path: '/user/:id',
+    name: 'user-profile',
+    component: () => import('@/views/ProfileView.vue'),
+    meta: { title: '用户资料 - Piccolo' }
+  },
+  {
     path: '/ranking',
     name: 'ranking',
     component: () => import('@/views/RankingView.vue'),

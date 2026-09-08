@@ -7,7 +7,7 @@
           <h1 class="topic-title">{{ topic.title }}</h1>
           <p v-if="topic.description" class="topic-desc">{{ topic.description }}</p>
           <div class="topic-meta">
-            <div class="meta-author">
+            <div class="meta-author" @click="$router.push(`/user/${topic.creatorId}`)" style="cursor:pointer">
               <el-avatar :size="28" :src="topic.creatorAvatar">
                 {{ topic.creatorName?.charAt(0) }}
               </el-avatar>
@@ -226,6 +226,11 @@ onMounted(() => {
   gap: 6px;
   font-size: 14px;
   font-weight: 600;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--pink);
+  }
 }
 
 .meta-divider {

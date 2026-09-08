@@ -4,27 +4,27 @@
       <!-- 用户信息卡片 -->
       <div class="profile-card">
         <div class="profile-avatar">
-          <el-avatar :size="80" :src="userStore.userInfo?.avatar">
-            {{ userStore.userInfo?.nickname?.charAt(0) }}
+          <el-avatar :size="80" :src="displayUser?.avatar">
+            {{ displayUser?.nickname?.charAt(0) }}
           </el-avatar>
-          <el-button size="small" round @click="showEditDialog = true">
+          <el-button v-if="isSelf" size="small" round @click="showEditDialog = true">
             编辑资料
           </el-button>
         </div>
         <div class="profile-info">
-          <h2>{{ userStore.userInfo?.nickname || userStore.userInfo?.username }}</h2>
-          <p class="bio">{{ userStore.userInfo?.bio || '这个人很懒，什么都没写~' }}</p>
+          <h2>{{ displayUser?.nickname || displayUser?.username }}</h2>
+          <p class="bio">{{ displayUser?.bio || '这个人很懒，什么都没写~' }}</p>
           <div class="stats">
             <div class="stat-item">
-              <span class="stat-num">{{ userInfo?.topicCount || 0 }}</span>
+              <span class="stat-num">{{ displayUser?.topicCount || 0 }}</span>
               <span class="stat-label">发起投票</span>
             </div>
             <div class="stat-item">
-              <span class="stat-num">{{ userInfo?.voteCount || 0 }}</span>
+              <span class="stat-num">{{ displayUser?.voteCount || 0 }}</span>
               <span class="stat-label">参与投票</span>
             </div>
             <div class="stat-item">
-              <span class="stat-num">{{ userInfo?.commentCount || 0 }}</span>
+              <span class="stat-num">{{ displayUser?.commentCount || 0 }}</span>
               <span class="stat-label">发表评论</span>
             </div>
           </div>
@@ -43,16 +43,21 @@
 
       <!-- 投票历史 -->
       <div v-if="activeTab === 'history'" class="tab-content">
-        <div v-if="voteHistory.length === 0" class="empty-state">
-          还没有投过票哦~ <router-link to="/">去逛逛 →</router-link>
-        </div>
-        <div v-for="item in voteHistory" :key="item.id" class="history-item"
-             @click="$router.push(`/topic/${item.topic_id}`)">
-          <div class="history-info">
-            <h4>{{ item.topic_title }}</h4>
-            <p>你投了: <span class="chosen">{{ item.option_text }}</span></p>
+        <template v-if="isSelf">
+          <div v-if="voteHistory.length === 0" class="empty-state">
+            还没有投过票哦~ <router-link to="/">去逛逛 →</router-link>
           </div>
-          <span class="history-time">{{ formatDate(item.created_at) }}</span>
+          <div v-for="item in voteHistory" :key="item.id" class="history-item"
+               @click="$router.push(`/topic/${item.topic_id}`)">
+            <div class="history-info">
+              <h4>{{ item.topic_title }}</h4>
+              <p>你投了: <span class="chosen">{{ item.option_text }}</span></p>
+            </div>
+            <span class="history-time">{{ formatDate(item.created_at) }}</span>
+          </div>
+        </template>
+        <div v-else class="empty-state">
+          只能查看自己的投票历史哦~
         </div>
       </div>
 
@@ -100,16 +105,23 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useTopicStore } from '@/stores/topic'
-import { updateProfile, uploadFile } from '@/api/user'
+import { getUserInfo, updateProfile, uploadFile } from '@/api/user'
 import { compressImage } from '@/utils/image'
 import { ElMessage } from 'element-plus'
 
+const route = useRoute()
 const userStore = useUserStore()
 const topicStore = useTopicStore()
 
+// 判断是否查看自己的主页
+const isSelf = computed(() => route.name === 'profile' || !route.params.id)
+
+// 展示的用户数据
+const displayUser = ref(null)
 const userInfo = ref(null)
 const voteHistory = ref([])
 const activeTab = ref('history')
@@ -157,17 +169,36 @@ async function handleAvatarUpload({ file }) {
   }
 }
 
-async function loadData() {
+async function loadSelfProfile() {
   try {
     const res = await userStore.fetchUserInfo()
-    userInfo.value = res.data
-    editForm.nickname = res.data.nickname
-    editForm.bio = res.data.bio
-    editForm.avatar = (typeof res.data.avatar === 'string') ? res.data.avatar : ''
+    const user = res.data
+    userInfo.value = user
+    displayUser.value = user
+    editForm.nickname = user.nickname
+    editForm.bio = user.bio
+    editForm.avatar = (typeof user.avatar === 'string') ? user.avatar : ''
     avatarPreview.value = ''
     voteHistory.value = await topicStore.fetchVoteHistory()
   } catch (e) {
     // handled
+  }
+}
+
+async function loadOtherProfile(userId) {
+  try {
+    const res = await getUserInfo(userId)
+    displayUser.value = res.data
+  } catch (e) {
+    ElMessage.error('用户不存在')
+  }
+}
+
+function loadData() {
+  if (isSelf.value) {
+    loadSelfProfile()
+  } else {
+    loadOtherProfile(route.params.id)
   }
 }
 
@@ -196,6 +227,13 @@ function formatDate(date) {
 
 onMounted(() => {
   loadData()
+})
+
+// 监听路由变化，支持在他人主页和自己的主页之间切换
+watch(() => route.fullPath, () => {
+  if (route.name === 'profile' || route.name === 'user-profile') {
+    loadData()
+  }
 })
 </script>
 

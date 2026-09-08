@@ -31,12 +31,14 @@
       </div>
 
       <div v-for="comment in comments" :key="comment.id" class="comment-item">
-        <el-avatar :size="32" :src="comment.userAvatar">
+        <el-avatar :size="32" :src="comment.userAvatar" style="cursor:pointer"
+                   @click="$router.push(`/user/${comment.userId}`)">
           {{ comment.username?.charAt(0) }}
         </el-avatar>
         <div class="comment-body">
           <div class="comment-header">
-            <span class="comment-author">{{ comment.username }}</span>
+            <span class="comment-author" style="cursor:pointer"
+                  @click="$router.push(`/user/${comment.userId}`)">{{ comment.username }}</span>
             <span class="comment-time">{{ formatTime(comment.createdAt) }}</span>
           </div>
           <p class="comment-content">
@@ -54,12 +56,14 @@
           <!-- 子评论 -->
           <div v-if="comment.children?.length" class="sub-comments">
             <div v-for="child in comment.children" :key="child.id" class="comment-item sub">
-              <el-avatar :size="24" :src="child.userAvatar">
+              <el-avatar :size="24" :src="child.userAvatar" style="cursor:pointer"
+                         @click="$router.push(`/user/${child.userId}`)">
                 {{ child.username?.charAt(0) }}
               </el-avatar>
               <div class="comment-body">
                 <div class="comment-header">
-                  <span class="comment-author">{{ child.username }}</span>
+                  <span class="comment-author" style="cursor:pointer"
+                        @click="$router.push(`/user/${child.userId}`)">{{ child.username }}</span>
                   <span class="comment-time">{{ formatTime(child.createdAt) }}</span>
                 </div>
                 <p class="comment-content">
@@ -211,6 +215,11 @@ function formatTime(time) {
   font-weight: 600;
   font-size: 13px;
   color: #333;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--pink);
+  }
 }
 
 .comment-time {

@@ -31,7 +31,7 @@
             <el-icon><DataLine /></el-icon> {{ topic.voteCount || 0 }}票
           </span>
         </div>
-        <div class="card-author">
+        <div class="card-author" @click.stop="$router.push(`/user/${topic.creatorId}`)">
           <el-avatar :size="20" :src="topic.creatorAvatar">
             {{ topic.creatorName?.charAt(0) }}
           </el-avatar>
@@ -166,5 +166,14 @@ function getOptionEmoji(index) {
   gap: 6px;
   font-size: 12px;
   color: #999;
+  cursor: pointer;
+  border-radius: 12px;
+  padding: 2px 6px;
+  transition: all 0.2s;
+
+  &:hover {
+    color: var(--pink);
+    background: var(--pink-light);
+  }
 }
 </style>

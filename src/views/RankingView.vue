@@ -39,7 +39,7 @@
               <span :class="['rank-num', `rank-${index + 1}`]">
                 {{ index < 3 ? ['🥇', '🥈', '🥉'][index] : index + 1 }}
               </span>
-              <div class="rank-info user-info">
+              <div class="rank-info user-info" @click.stop="$router.push(`/user/${user.id}`)">
                 <el-avatar :size="32" :src="user.avatar">
                   {{ user.nickname?.charAt(0) }}
                 </el-avatar>
