@@ -24,7 +24,7 @@
         <template v-if="userStore.isLoggedIn">
           <el-button type="primary" round class="create-btn" @click="$router.push('/topic/create')">
             <el-icon><Plus /></el-icon>
-            发起投票
+            <span class="btn-text">发起投票</span>
           </el-button>
           <el-dropdown trigger="click" @command="handleCommand">
             <div class="user-avatar">
@@ -173,16 +173,30 @@ function handleCommand(command) {
 /* 移动端适配 */
 @media (max-width: 768px) {
   .logo-text {
-    font-size: 18px;
+    display: none;
   }
 
   .logo-icon {
-    font-size: 22px;
+    font-size: 24px;
   }
 
+  /* 导航只显示图标 */
+  .nav-item {
+    padding: 8px 10px;
+    gap: 0;
+
+    span {
+      display: none;
+    }
+  }
+
+  /* 发起投票只显示图标 */
   .create-btn {
-    padding: 6px 12px;
-    font-size: 13px;
+    padding: 8px 12px;
+
+    .btn-text {
+      display: none;
+    }
   }
 
   .header-actions {
