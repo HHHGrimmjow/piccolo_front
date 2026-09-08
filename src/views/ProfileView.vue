@@ -104,6 +104,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useTopicStore } from '@/stores/topic'
 import { updateProfile, uploadFile } from '@/api/user'
+import { compressImage } from '@/utils/image'
 import { ElMessage } from 'element-plus'
 
 const userStore = useUserStore()
@@ -125,13 +126,13 @@ const editForm = reactive({
 
 function beforeAvatarUpload(file) {
   const isImage = ['image/jpeg', 'image/png', 'image/gif'].includes(file.type)
-  const isLt2M = file.size / 1024 / 1024 < 2
+  const isLt10M = file.size / 1024 / 1024 < 10
   if (!isImage) {
     ElMessage.error('只能上传 JPG/PNG/GIF 格式的图片')
     return false
   }
-  if (!isLt2M) {
-    ElMessage.error('图片大小不能超过 2MB')
+  if (!isLt10M) {
+    ElMessage.error('图片大小不能超过 10MB')
     return false
   }
   return true
@@ -140,7 +141,11 @@ function beforeAvatarUpload(file) {
 async function handleAvatarUpload({ file }) {
   avatarUploading.value = true
   try {
-    const res = await uploadFile(file)
+    let uploadFileObj = file
+    if (file.size > 500 * 1024) {
+      uploadFileObj = await compressImage(file)
+    }
+    const res = await uploadFile(uploadFileObj)
     const url = res.data
     editForm.avatar = url
     avatarPreview.value = url

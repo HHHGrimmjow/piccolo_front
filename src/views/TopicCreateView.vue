@@ -80,6 +80,7 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTopicStore } from '@/stores/topic'
 import { uploadFile } from '@/api/user'
+import { compressImage } from '@/utils/image'
 import { ElMessage } from 'element-plus'
 
 const router = useRouter()
@@ -130,7 +131,11 @@ function removeOption(index) {
 
 async function handleUpload({ file }) {
   try {
-    const res = await uploadFile(file)
+    let uploadFileObj = file
+    if (file.size > 500 * 1024) {
+      uploadFileObj = await compressImage(file, 1200, 0.85)
+    }
+    const res = await uploadFile(uploadFileObj)
     form.imageUrl = res.data
     ElMessage.success('图片上传成功~')
   } catch (e) {
